@@ -5,10 +5,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.blankj.utilcode.util.FileIOUtils;
 import com.blankj.utilcode.util.FileUtils;
 
 import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -16,12 +21,13 @@ import java.util.List;
 
 public class JavaCrashHandler implements Thread.UncaughtExceptionHandler {
 
+    private static final String TAG = "JavaCrashHandler";
     private static final String LOG_FILE_NAME_SUFFIX = ".log";
     private static final String CRASH_FOLDER_NAME = "crash";
     private static Thread.UncaughtExceptionHandler mDefaultCrashHandler;
     private static Context mContext;
 
-    private JavaCrashHandler() {
+    public JavaCrashHandler() {
     }
 
     public static void init(@NonNull Context context) {
@@ -31,14 +37,16 @@ public class JavaCrashHandler implements Thread.UncaughtExceptionHandler {
         Thread.setDefaultUncaughtExceptionHandler(new JavaCrashHandler());
     }
 
-    /*** 当程序中有未被捕获的异常，系统将会调用这个方法 ** @param t 出现未捕获异常的线程 * @param e 得到异常信息 */
     @Override
     public void uncaughtException(@NonNull Thread thread, @NonNull Throwable throwable) {
         try {
             // 自行处理：保存本地
-            String file = dealException(thread, throwable);
-            // 上传服务器
-            // ......
+            String cfPathName = dealException(thread, throwable);
+
+            if (cfPathName != null) {
+                // 上传服务器
+                // ......
+            }
         } catch (Exception e1) {
             e1.printStackTrace();
         } finally {
@@ -49,11 +57,10 @@ public class JavaCrashHandler implements Thread.UncaughtExceptionHandler {
         }
     }
 
-    /*** 导出异常信息到SD卡 ** @param e */
     private String dealException(Thread thread, Throwable throwable) {
-        String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String time = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss").format(new Date());
         String crashFilePathName = mContext.getExternalCacheDir().getAbsoluteFile()
-                + CRASH_FOLDER_NAME + File.separator
+                + File.separator + CRASH_FOLDER_NAME + File.separator
                 + time + LOG_FILE_NAME_SUFFIX;
         String dirName = FileUtils.getDirName(crashFilePathName);
         if (FileUtils.createOrExistsDir(dirName)) {
@@ -66,10 +73,35 @@ public class JavaCrashHandler implements Thread.UncaughtExceptionHandler {
 
             // 生成新文件
             if (FileUtils.createOrExistsFile(crashFilePathName)) {
-                return crashFilePathName;
+                String sb = "Thread:" + thread.getName() + "\n" +
+                        "StackTraceInfo:" + "\n" +
+                        getStackTraceInfo(throwable) + "\n" +
+                        "PhoneInfo:" + getPhoneInfo();
+                if (FileIOUtils.writeFileFromString(crashFilePathName , sb)) {
+                    return crashFilePathName;
+                }
             }
         }
         return null;
+    }
+
+    /**
+     * 获取Exception崩溃堆栈
+     */
+    public static String getStackTraceInfo(final Throwable ex) {
+        String trace = "Error type: Java Crash\n";
+        try {
+            Writer writer = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(writer);
+            ex.printStackTrace(printWriter);
+            trace = writer.toString();
+            printWriter.close();
+        } catch (Exception e) {
+            Log.e(TAG,"getStackTraceInfo failed.");
+            ex.printStackTrace();
+            return trace;
+        }
+        return trace;
     }
 
     private String getPhoneInfo() {
