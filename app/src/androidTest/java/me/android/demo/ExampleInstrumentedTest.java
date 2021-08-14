@@ -26,11 +26,15 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         //assertEquals("me.android.demo", appContext.getPackageName());
 
-        // Crash Handler
-        //JavaCrashHandler handler = new JavaCrashHandler();
-        //handler.uncaughtException(Thread.currentThread(), new IllegalArgumentException("Test"));
+        //Crash Handler Test Code
+        // JavaCrashHandler handler = new JavaCrashHandler();
+        // handler.uncaughtException(Thread.currentThread(), new IllegalArgumentException("Test"));
 
-        ShellUtils.CommandResult commandResult = ShellUtils.execCommand(new String[]{"dumpsys input"});
-        Log.d("useAppContext", commandResult.toString());
+        //Here throw the exception can Not handle to application CrashHandler
+        // throw new IllegalStateException("Throw a test exception");
+
+        //Dump information
+        // ShellUtils.CommandResult commandResult = ShellUtils.execCommand(new String[]{"dumpsys input"});
+        // Log.d("useAppContext", commandResult.toString());
     }
 }

@@ -77,6 +77,7 @@ public class JavaCrashHandler implements Thread.UncaughtExceptionHandler {
                         "StackTraceInfo:" + "\n" +
                         getStackTraceInfo(throwable) + "\n" +
                         "PhoneInfo:" + getPhoneInfo();
+                Log.d(TAG, "dealException: " + sb);
                 if (FileIOUtils.writeFileFromString(crashFilePathName , sb)) {
                     return crashFilePathName;
                 }
