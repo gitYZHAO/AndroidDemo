@@ -3,6 +3,7 @@
     package="me.android.demo">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.DUMP"/>
 
     <application
         android:name=".application.DemoApplication"
