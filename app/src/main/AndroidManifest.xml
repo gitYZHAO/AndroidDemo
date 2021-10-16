@@ -3,6 +3,7 @@
     package="me.android.demo">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.DUMP"/>
 
     <application
@@ -16,10 +17,16 @@
         <activity android:name="me.android.demo.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".receiver.NetWorkStateReceiver"
+            android:enabled="true"
+            android:exported="true">
+<!--            <intent-filter>-->
+<!--                <action android:name="net.android.MY_BROADCAST"/>-->
+<!--            </intent-filter>-->
+        </receiver>
     </application>
 
 </manifest>
