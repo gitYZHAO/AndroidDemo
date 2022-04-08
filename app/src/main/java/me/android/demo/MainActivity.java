@@ -12,6 +12,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 sendBroadcast(new Intent("net.android.MY_BROADCAST"));
 
                 // 方式二：
-                //参数1-包名 参数2-广播接收者所在的路径名
+                // 参数1-包名 参数2-广播接收者所在的路径名
                 // ComponentName componentName = new ComponentName(getApplicationContext(),
                 //         "me.android.demo.receiver.NetWorkStateReceiver");
                 // Intent intent = new Intent();
@@ -71,6 +72,21 @@ public class MainActivity extends AppCompatActivity {
         //动态注册
         register();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -145,5 +161,10 @@ public class MainActivity extends AppCompatActivity {
     private void unregister() {
         unregisterReceiver(netWorkStateReceiver);
     }
+
+    enum MyType {
+        NO_VALUE,
+        ONE_VALUE,
+    };
 
 }
