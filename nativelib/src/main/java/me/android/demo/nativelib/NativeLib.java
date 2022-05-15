@@ -11,5 +11,9 @@ public class NativeLib {
      * A native method that is implemented by the 'nativelib' native library,
      * which is packaged with this application.
      */
-    public native String stringFromJNI();
+    public native String stringFromJNI(NativeLib obj);
+
+    public String getStringFromJava(int i) {
+        return "The String from JAVA";
+    }
 }

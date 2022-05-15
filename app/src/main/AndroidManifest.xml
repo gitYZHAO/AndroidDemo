@@ -28,9 +28,9 @@
         <receiver android:name=".receiver.NetWorkStateReceiver"
             android:enabled="true"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="net.android.MY_BROADCAST"/>-->
-<!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="net.android.MY_BROADCAST"/>
+            </intent-filter>
         </receiver>
     </application>
 

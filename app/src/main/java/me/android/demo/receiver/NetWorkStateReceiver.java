@@ -25,6 +25,8 @@ public class NetWorkStateReceiver extends BroadcastReceiver {
             //         e.printStackTrace();
             //     }
             // }
+            // int a = 2/0;
+            Log.d(TAG,"Handle net.android.MY_BROADCAST:");
 
         }
 

@@ -54,14 +54,16 @@ public class MainActivity extends AppCompatActivity {
                 // 方式一：
                 // 在 SDK 26，为限制后台过多应用启动，接受广播等情况，将静态注册的广播接收器失效。
                 // 在 发送隐式Intent 的时候，接收器只能通过动态注册广播接收器解决
-                sendBroadcast(new Intent("net.android.MY_BROADCAST"));
+                // sendBroadcast(new Intent("net.android.MY_BROADCAST"));
 
                 // 方式二：
                 // 参数1-包名 参数2-广播接收者所在的路径名
-                // ComponentName componentName = new ComponentName(getApplicationContext(),
-                //         "me.android.demo.receiver.NetWorkStateReceiver");
-                // Intent intent = new Intent();
-                // intent.setComponent(componentName);
+                ComponentName componentName = new ComponentName(getApplicationContext(),
+                        "me.android.demo.receiver.NetWorkStateReceiver");
+                Intent intent = new Intent();
+                intent.setComponent(componentName);
+                intent.setAction("net.android.MY_BROADCAST");
+                sendBroadcast(intent);
             }
         });
 
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         handler = new MyHandler(testhandler.getLooper());
 
         //动态注册
-        register();
+        // register();
 
     }
 
@@ -144,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     NetWorkStateReceiver netWorkStateReceiver;
+    boolean registered = false;
 
     private void register() {
         if (netWorkStateReceiver == null) {
@@ -155,11 +158,13 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = registerReceiver(netWorkStateReceiver, filter);
         if (intent == null) {
             Log.e("register", "register fail");
+            return;
         }
+        registered = true;
     }
 
     private void unregister() {
-        unregisterReceiver(netWorkStateReceiver);
+        if (registered) unregisterReceiver(netWorkStateReceiver);
     }
 
     enum MyType {

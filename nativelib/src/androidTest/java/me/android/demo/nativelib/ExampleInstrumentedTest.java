@@ -20,13 +20,19 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
-    public void useAppContext() {
+    public void useNativeAppContext() {
         // Context of the app under test.
         // Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         // assertEquals("me.android.demo.nativelib.test", appContext.getPackageName());
 
-        NativeLib nativeLib = new NativeLib();
-        String s = nativeLib.stringFromJNI();
-        Log.d("TEST","Get the string： " + s);
+        try {
+            NativeLib nativeLib = new NativeLib();
+            String s = nativeLib.stringFromJNI(nativeLib);
+            Log.d("NativeLib","Get the string： " + s);
+
+        } catch (Exception exception) {
+            Log.e("NativeLib", "error:" +exception.toString());
+        }
+
     }
 }
