@@ -18,6 +18,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import me.android.demo.receiver.NetWorkStateReceiver;
+import me.android.demo.service.IRemoteService;
+import me.android.demo.task.RemoteServiceTask;
 import me.android.demo.util.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                 //         "me.android.demo.receiver.NetWorkStateReceiver");
                 // Intent intent = new Intent();
                 // intent.setComponent(componentName);
+
+                new Thread(new RemoteServiceTask()).start();
             }
         });
 
@@ -71,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         //动态注册
         register();
-
     }
 
     @Override

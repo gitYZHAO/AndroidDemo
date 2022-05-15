@@ -32,6 +32,15 @@
 <!--                <action android:name="net.android.MY_BROADCAST"/>-->
 <!--            </intent-filter>-->
         </receiver>
+
+        <service
+            android:name=".service.RemoteServices"
+            android:exported="true"
+            android:process=":remote" />
+        <service
+            android:name=".service.LocalClientService"
+            android:exported="true" />
+
     </application>
 
 </manifest>
